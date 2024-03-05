@@ -7,7 +7,7 @@ const page = () => {
   const router = useRouter();
 
   const handleVoterLogin = () => {
-    router.push("/voter");
+    router.push("/signin");
   };
   const handleAdminLogin = () => {
     router.push("/admin");
