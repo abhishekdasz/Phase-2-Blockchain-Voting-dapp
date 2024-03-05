@@ -242,26 +242,26 @@ const Page = () => {
           </div>
           <br /> <h1>Results:</h1>
           {winner && (
-  <div className="winner-section">
-    <h3>Congratulations, Winner is: {winner}</h3>
-    <br />
-    <div>
-      <h2> Vote Stats: </h2>
-      {winnerDetails.map((details, index) => {
-        // Extract the public key and party name
-        const publicKey = details[2];
-        const party = details[3];
-        
-        return (
-          <div key={index}>
-            <p>{publicKey}: {party}</p>
-            <br />
-          </div>
-        );
-      })}
-    </div>
-  </div>
-)}
+            <div className="winner-section">
+              <h3>Congratulations, Winner is: {winner}</h3>
+              <br />
+              <div>
+                <h2> Vote Stats: </h2>
+                {winnerDetails.map((details, index) => {
+                  // Extract the public key and party name
+                  const publicKey = details[2];
+                  const party = details[3];
+
+                  return (
+                    <div key={index}>
+                      <p>{publicKey}: {party}</p>
+                      <br />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
