@@ -1,0 +1,78 @@
+.homeSec 
+{
+  background: #0f0c29;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+  color: #fff;
+  height: 100vh;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.homeDiv
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* gap: 5rem; */
+}
+.leftSec
+{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header
+{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 550px;
+}
+
+.header h1 
+{
+  font-size: 2.5rem;
+}
+.header h3 
+{
+  font-size: 1.5rem;
+}
+.header p
+{
+  font-size: 1.2rem;
+}
+.buttons
+{
+  display: flex;
+  gap: 2rem;
+}
+.btn 
+{
+  background: pink;
+  color: black;
+  padding: 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  /* Add box shadow for depth */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn:hover {
+  background: #ff69b4;
+}
+
+
+.rightSec
+{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rightSec img
+{
+  max-width: 80%;
+  height: auto;
+}
