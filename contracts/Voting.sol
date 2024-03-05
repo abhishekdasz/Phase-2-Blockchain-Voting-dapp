@@ -22,7 +22,6 @@ contract Voting {
 
     mapping(address => Voter) public voters;
     mapping(address => bool) public hasRegistered;
-    mapping(address => uint256) public votesByVoter;
 
     Candidate[] public candidates;
     address[] public votersByIndex;
@@ -56,6 +55,8 @@ contract Voting {
         require(block.timestamp >= votingEnd, "Voting has not ended yet");
         _;
     }
+
+    event VoteCast(address indexed voter, uint256 indexed candidateIndex);
 
     constructor(uint256 _durationInMinutes, address _admin) {
         require(_durationInMinutes > 0, "Voting duration must be greater than zero");
@@ -152,8 +153,8 @@ contract Voting {
         voters[msg.sender].hasVoted = true;
         voters[msg.sender].votedCandidateIndex = _candidateIndex;
 
-        // Update votesByVoter mapping
-        votesByVoter[msg.sender] = _candidateIndex;
+        // Emit event to log the vote cast
+        emit VoteCast(msg.sender, _candidateIndex);
     }
 
     function getAllCandidates() public view returns (Candidate[] memory) {
@@ -161,16 +162,15 @@ contract Voting {
     }
 
     function getAllVoters() public view returns (address[] memory, uint256[] memory) {
-        address[] memory allVoterAddresses = new address[](totalVoters);
-        uint256[] memory votedCandidateIndexes = new uint256[](totalVoters);
+        address[] memory voterAddresses = new address[](totalVoters);
+        uint256[] memory votedCandidateIndices = new uint256[](totalVoters);
 
         for (uint256 i = 0; i < totalVoters; i++) {
-            address voterAddress = votersByIndex[i];
-            allVoterAddresses[i] = voterAddress;
-            votedCandidateIndexes[i] = voters[voterAddress].votedCandidateIndex;
+            voterAddresses[i] = votersByIndex[i];
+            votedCandidateIndices[i] = voters[votersByIndex[i]].votedCandidateIndex;
         }
 
-        return (allVoterAddresses, votedCandidateIndexes);
+        return (voterAddresses, votedCandidateIndices);
     }
 
     function getCandidateCount() public view returns (uint256) {

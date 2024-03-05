@@ -26,6 +26,7 @@ const Page = () => {
   const [isVotingStarted, setIsVotingStarted] = useState(true); // Assume voting is in progress
   const [winner, setWinner] = useState("");
   const [winnerDetails, setWinnerDetails] = useState([]);
+  const [voters, setVoters] = useState([]);
 
   // Contract details
   const contractAddress = CON_ADDRESS;
@@ -116,6 +117,41 @@ const Page = () => {
     }
   };
 
+  // Fetch and display voting status when the component mounts
+  useEffect(() => {
+    updateVotingStatus();
+    getAllCandidates();
+    fetchVoters();
+  }, []);
+
+  // Fetch list of voters
+  const fetchVoters = async () => {
+    try {
+      // Connect to the Ethereum provider
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractAbi,
+        provider
+      );
+
+      // Call the getAllVoters function on the smart contract
+      const [voterAddresses, votedCandidateIndices] = await contract.getAllVoters();
+
+      // Fetch candidates to match the voted indices with the candidate names
+      const fetchedCandidates = await contract.getAllCandidates();
+
+      const formattedVoters = voterAddresses.map((address, index) => ({
+        address,
+        party: fetchedCandidates[votedCandidateIndices[index]].party
+      }));
+
+      // Update the component state with the fetched voters
+      setVoters(formattedVoters);
+    } catch (error) {
+      console.error("Error fetching voters:", error);
+    }
+  };
+
   // Update voting status
   const updateVotingStatus = async () => {
     try {
@@ -139,17 +175,6 @@ const Page = () => {
     }
   };
 
-  // Fetch and display candidates when the component mounts
-  useEffect(() => {
-    getAllCandidates();
-  }, []);
-
-  // Fetch and display voting status when the component mounts
-  useEffect(() => {
-    updateVotingStatus();
-  }, []);
-
-  // Listen for WinnerDeclared event
   // Listen for WinnerDeclared event
   useEffect(() => {
     const fetchWinner = async () => {
@@ -217,25 +242,27 @@ const Page = () => {
           </div>
           <br /> <h1>Results:</h1>
           {winner && (
-            <div className="winner-section">
-              <h3>Congratulations, Winner is: {winner}</h3>
+  <div className="winner-section">
+    <h3>Congratulations, Winner is: {winner}</h3>
+    <br />
+    <div>
+      <h2> Vote Stats: </h2>
+      {winnerDetails.map((details, index) => {
+        // Extract the public key and party name
+        const publicKey = details[2];
+        const party = details[3];
+        
+        return (
+          <div key={index}>
+            <p>{publicKey}: {party}</p>
+            <br />
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
 
-              <br />
-              <div>
-                <h2> Vote Stats: </h2>
-                {winnerDetails.map((details, index) => (
-                  <div key={index}>
-                    <p>Name: {details[0]}</p>
-                    <p>Age: {details[1].toString()}</p>
-                    {/* <p>Address: {details[2]}</p> */}
-                    <p>Party: {details[3]}</p>
-                    <p>Votes: {details[4].toString()}</p>
-                    <br />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
