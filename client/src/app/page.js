@@ -40,7 +40,7 @@ const page = () => {
               </div>
               <div className={styles.btn} onClick={handleVoterLogin}>
                 {" "}
-                Voter Login/Sign up{" "}
+                Voter Login{" "}
               </div>
             </div>
           </div>

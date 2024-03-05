@@ -17,10 +17,12 @@ contract Voting {
         string name;
         uint256 age;
         bool hasVoted;
+        uint256 votedCandidateIndex;
     }
 
     mapping(address => Voter) public voters;
     mapping(address => bool) public hasRegistered;
+    mapping(address => uint256) public votesByVoter;
 
     Candidate[] public candidates;
     address[] public votersByIndex;
@@ -123,7 +125,8 @@ contract Voting {
         voters[msg.sender] = Voter({
             name: _name,
             age: _age,
-            hasVoted: false
+            hasVoted: false,
+            votedCandidateIndex: 0
         });
 
         hasRegistered[msg.sender] = true;
@@ -147,21 +150,27 @@ contract Voting {
 
         candidates[_candidateIndex].voteCount++;
         voters[msg.sender].hasVoted = true;
+        voters[msg.sender].votedCandidateIndex = _candidateIndex;
+
+        // Update votesByVoter mapping
+        votesByVoter[msg.sender] = _candidateIndex;
     }
 
     function getAllCandidates() public view returns (Candidate[] memory) {
         return candidates;
     }
 
-    function getAllVoters() public view returns (Voter[] memory) {
-        Voter[] memory allVoters = new Voter[](totalVoters);
+    function getAllVoters() public view returns (address[] memory, uint256[] memory) {
+        address[] memory allVoterAddresses = new address[](totalVoters);
+        uint256[] memory votedCandidateIndexes = new uint256[](totalVoters);
 
         for (uint256 i = 0; i < totalVoters; i++) {
             address voterAddress = votersByIndex[i];
-            allVoters[i] = voters[voterAddress];
+            allVoterAddresses[i] = voterAddress;
+            votedCandidateIndexes[i] = voters[voterAddress].votedCandidateIndex;
         }
 
-        return allVoters;
+        return (allVoterAddresses, votedCandidateIndexes);
     }
 
     function getCandidateCount() public view returns (uint256) {

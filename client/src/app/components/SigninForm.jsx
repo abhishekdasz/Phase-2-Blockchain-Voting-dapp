@@ -18,7 +18,7 @@ const SigninForm = () => {
             console.log(res);
             if (res.status === 200) {
                 router.push('/voter'); // Redirect to dashboard after successful sign in
-                alert("Sign in successful");
+                alert("Sign in successful. Now register into Voter Portal.");
             }
         } catch (error) {
             console.log(error);
