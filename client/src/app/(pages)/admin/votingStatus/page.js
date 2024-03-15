@@ -254,7 +254,8 @@ const Page = () => {
 
                   return (
                     <div key={index}>
-                      <p>{publicKey}: {party}</p>
+                      <p> {publicKey} </p>
+                      {/* <p>{publicKey}: {party}</p> */}
                       <br />
                     </div>
                   );
